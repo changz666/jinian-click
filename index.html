@@ -53,6 +53,10 @@
   </div>
   
   <div class="ui tip" id="tip">🔗 祭奠记录已上链存证 (SUI Network)</div>
+  
+  <!-- 720全景iframe嵌入 -->
+  <iframe id="vrFrame" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999;border:none;" allowfullscreen></iframe>
+  <button id="closeVr" style="display:none;position:fixed;top:20px;right:20px;z-index:1000;padding:10px 20px;background:#fff;border:none;border-radius:5px;cursor:pointer;font-size:16px;" onclick="closeVr()">✕ 关闭全景</button>
 
   <script>
     // Cesium Token
@@ -81,7 +85,7 @@
     let stage = 'earth';
 
     function goTo720() {
-      window.open('https://vr.3d66.com/vr/index_detail_2633658.asp?mobile=https%3A%2F%2Fm.3d66.com%2Fvr%2Flist.html%3Fk%3D%25E7%25A5%25A0%25E5%25A0%2582%26source%3D1%26llw%3D1', '_blank');
+      window.open('https://vr.3d66.com/vr/index_detail_5046407.asp?pageSource=2', '_blank');
     }
 
     function descend() {
@@ -152,9 +156,17 @@
       });
     }
 
+    function closeVr() {
+      document.getElementById('vrFrame').style.display = 'none';
+      document.getElementById('vrFrame').src = '';
+      document.getElementById('closeVr').style.display = 'none';
+    }
+
     function goTo720() {
-      // 跳转到720云全景
-      window.open('https://vr.3d66.com/vr/index_detail_5046407.asp?pageSource=2', '_blank');
+      // 显示720全景iframe
+      document.getElementById('vrFrame').src = 'https://vr.3d66.com/vr/index_detail_2633658.asp';
+      document.getElementById('vrFrame').style.display = 'block';
+      document.getElementById('closeVr').style.display = 'block';
     }
 
     function offer(type) {
