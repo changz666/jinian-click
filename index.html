@@ -43,7 +43,7 @@
     <p>3D元宇宙祭奠平台</p>
   </div>
   
-  <button class="ui btn-enter" onclick="descend()">🚀 进入纪念空间</button>
+  <button class="ui btn-enter" onclick="goTo720()">🏛️ 进入常氏祠堂</button>
   
   <div class="ui offer-btts" id="offers">
     <button class="offer-btn" onclick="offer('花')">🌸 献花</button>
@@ -72,9 +72,9 @@
       scene3DOnly: true
     });
 
-    // 初始视角 - 中国
+    // 初始视角 - 榆林(37°59'08"N 109°32'56"E)
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 20000000)
+      destination: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 5000)
     });
 
     let stage = 'earth';
@@ -84,7 +84,7 @@
       
       // 俯冲到祠堂位置
       viewer.camera.flyTo({
-        destination: Cesium.Cartesian3.fromDegrees(109.55, 37.98, 1500),
+        destination: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 5000),
         duration: 3,
         complete: function() {
           stage = 'temple';
@@ -98,8 +98,8 @@
     }
 
     function addTemple() {
-      // 添加祠堂位置 - 北京天坛附近
-      const position = Cesium.Cartesian3.fromDegrees(116.41, 39.91, 0);
+      // 添加祠堂位置 - 榆林
+      const position = Cesium.Cartesian3.fromDegrees(109.55, 37.99, 0);
       
       // 祠堂主体（红色矩形）
       viewer.entities.add({
@@ -114,7 +114,7 @@
 
       // 屋顶（黄色三角形）
       viewer.entities.add({
-        position: Cesium.Cartesian3.fromDegrees(116.41, 39.91, 60),
+        position: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 60),
         box: {
           dimensions: new Cesium.Cartesian3(220, 160, 20),
           material: Cesium.Color.GOLD
@@ -139,7 +139,7 @@
 
       // 牌匾
       viewer.entities.add({
-        position: Cesium.Cartesian3.fromDegrees(116.41, 39.915, 70),
+        position: Cesium.Cartesian3.fromDegrees(109.55, 37.995, 70),
         box: {
           dimensions: new Cesium.Cartesian3(80, 10, 15),
           material: Cesium.Color.BLACK
@@ -147,12 +147,17 @@
       });
     }
 
+    function goTo720() {
+      // 跳转到720云全景
+      window.open('https://vr.3d66.com/vr/index_detail_5046407.asp?pageSource=2', '_blank');
+    }
+
     function offer(type) {
       // 添加祭奠效果
       const positions = [
-        Cesium.Cartesian3.fromDegrees(116.41, 39.91, 100),
-        Cesium.Cartesian3.fromDegrees(116.408, 39.91, 100),
-        Cesium.Cartesian3.fromDegrees(116.412, 39.91, 100)
+        Cesium.Cartesian3.fromDegrees(109.55, 37.99, 100),
+        Cesium.Cartesian3.fromDegrees(109.548, 37.99, 100),
+        Cesium.Cartesian3.fromDegrees(109.552, 37.99, 100)
       ];
       
       const emojis = ['🌸', '💰', '🕯️'];
@@ -162,7 +167,7 @@
       for(let i=0; i<10; i++) {
         setTimeout(() => {
           viewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(116.41, 39.91, 100 + i*5),
+            position: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 100 + i*5),
             point: {
               pixelSize: 30,
               color: Cesium.Color.WHITE.withAlpha(0.8)
