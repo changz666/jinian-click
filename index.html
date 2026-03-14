@@ -43,9 +43,10 @@
     <p>3D元宇宙祭奠平台</p>
   </div>
   
-  <button class="ui btn-enter" onclick="goTo720()">🏛️ 进入常氏祠堂</button>
+  <button class="ui btn-enter" onclick="descend()">🚀 进入纪念空间</button>
   
   <div class="ui offer-btts" id="offers">
+    <button class="offer-btn" style="font-size:1.2rem;padding:15px 30px;background:linear-gradient(135deg,#667eea,#764ba2);" onclick="goTo720()">🏛️ 进入常氏祠堂</button>
     <button class="offer-btn" onclick="offer('花')">🌸 献花</button>
     <button class="offer-btn" onclick="offer('纸')">💰 烧纸</button>
     <button class="offer-btn" onclick="offer('香')">🕯️ 焚香</button>
@@ -78,6 +79,10 @@
     });
 
     let stage = 'earth';
+
+    function goTo720() {
+      window.open('https://vr.3d66.com/vr/index_detail_5046407.asp?pageSource=2', '_blank');
+    }
 
     function descend() {
       stage = 'descending';
