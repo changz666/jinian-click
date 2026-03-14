@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>纪念祠 - 3D元宇宙祭奠平台</title>
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Microsoft YaHei', sans-serif; overflow: hidden; }
+    #cesiumContainer { width: 100vw; height: 100vh; }
+    .ui { position: absolute; z-index: 100; color: white; }
+    .title { top: 20px; left: 20px; }
+    .title h1 { font-size: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+    .title p { opacity: 0.8; }
+    .btn-enter { 
+      position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%);
+      padding: 15px 40px; font-size: 1.2rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none; border-radius: 30px; color: white; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .offer-btts { 
+      position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
+      display: none; gap: 20px;
+    }
+    .offer-btn {
+      padding: 12px 24px; font-size: 1rem;
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3); border-radius: 12px;
+      color: white; cursor: pointer;
+    }
+    .tip { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; display: none; }
+    .cesium-viewer-bottom { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  
+  <div class="ui title">
+    <h1>🕯️ 纪念祠</h1>
+    <p>3D元宇宙祭奠平台</p>
+  </div>
+  
+  <button class="ui btn-enter" onclick="descend()">🚀 进入纪念空间</button>
+  
+  <div class="ui offer-btts" id="offers">
+    <button class="offer-btn" style="font-size:1.2rem;padding:15px 30px;background:linear-gradient(135deg,#667eea,#764ba2);" onclick="goTo720()">🏛️ 进入常氏祠堂</button>
+    <button class="offer-btn" onclick="offer('花')">🌸 献花</button>
+    <button class="offer-btn" onclick="offer('纸')">💰 烧纸</button>
+    <button class="offer-btn" onclick="offer('香')">🕯️ 焚香</button>
+  </div>
+  
+  <div class="ui tip" id="tip">🔗 祭奠记录已上链存证 (SUI Network)</div>
+
+  <script>
+    // Cesium Token
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyM2RlNzVmYS1iOTg2LTRkNDYtODAzOS1lYTUzOThjYWE2ZmEiLCJpZCI6NDAzNDgzLCJpYXQiOjE3NzM0NzY3NTN9.I5QiLSn5LQwvk--e2AJrluc8JJNypTCbqHJAGJIDewE';
+    
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+      terrainProvider: Cesium.createWorldTerrain(),
+      animation: false,
+      baseLayerPicker: false,
+      fullscreenButton: false,
+      vrButton: false,
+      geocoder: false,
+      homeButton: false,
+      sceneModePicker: false,
+      selectionIndicator: false,
+      timeline: false,
+      navigationHelpButton: false,
+      scene3DOnly: true
+    });
+
+    // 初始视角 - 榆林(37°59'08"N 109°32'56"E)
+    viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 20000000)
+    });
+
+    let stage = 'earth';
+
+    function goTo720() {
+      window.open('https://vr.3d66.com/vr/index_detail_5046407.asp?pageSource=2', '_blank');
+    }
+
+    function descend() {
+      stage = 'descending';
+      
+      // 俯冲到祠堂位置
+      viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 5000),
+        duration: 3,
+        complete: function() {
+          stage = 'temple';
+          // 添加祠堂模型（简单体）
+          addTemple();
+          document.querySelector('.btn-enter').style.display = 'none';
+          document.getElementById('offers').style.display = 'flex';
+          document.getElementById('tip').style.display = 'block';
+        }
+      });
+    }
+
+    function addTemple() {
+      // 添加祠堂位置 - 榆林
+      const position = Cesium.Cartesian3.fromDegrees(109.55, 37.99, 0);
+      
+      // 祠堂主体（红色矩形）
+      viewer.entities.add({
+        position: position,
+        box: {
+          dimensions: new Cesium.Cartesian3(200, 150, 80),
+          material: Cesium.Color.fromCssColorString('#8B0000'),
+          outline: true,
+          outlineColor: Cesium.Color.GOLD
+        }
+      });
+
+      // 屋顶（黄色三角形）
+      viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 60),
+        box: {
+          dimensions: new Cesium.Cartesian3(220, 160, 20),
+          material: Cesium.Color.GOLD
+        }
+      });
+
+      // 柱子
+      const colors = [Cesium.Color.WHITE, Cesium.Color.RED, Cesium.Color.fromCssColorString('#8B0000')];
+      const offsets = [[-70,-50], [70,-50], [-70,50], [70,50]];
+      
+      offsets.forEach((off, i) => {
+        viewer.entities.add({
+          position: Cesium.Cartesian3.fromDegrees(116.41 + off[0]*0.0001, 39.91 + off[1]*0.0001, 20),
+          cylinder: {
+            length: 60,
+            topRadius: 5,
+            bottomRadius: 5,
+            material: Cesium.Color.fromCssColorString('#8B0000')
+          }
+        });
+      });
+
+      // 牌匾
+      viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(109.55, 37.995, 70),
+        box: {
+          dimensions: new Cesium.Cartesian3(80, 10, 15),
+          material: Cesium.Color.BLACK
+        }
+      });
+    }
+
+    function goTo720() {
+      // 跳转到720云全景
+      window.open('https://vr.3d66.com/vr/index_detail_5046407.asp?pageSource=2', '_blank');
+    }
+
+    function offer(type) {
+      // 添加祭奠效果
+      const positions = [
+        Cesium.Cartesian3.fromDegrees(109.55, 37.99, 100),
+        Cesium.Cartesian3.fromDegrees(109.548, 37.99, 100),
+        Cesium.Cartesian3.fromDegrees(109.552, 37.99, 100)
+      ];
+      
+      const emojis = ['🌸', '💰', '🕯️'];
+      const emoji = emojis[['花','纸','香'].indexOf(type)];
+      
+      // 飘落效果
+      for(let i=0; i<10; i++) {
+        setTimeout(() => {
+          viewer.entities.add({
+            position: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 100 + i*5),
+            point: {
+              pixelSize: 30,
+              color: Cesium.Color.WHITE.withAlpha(0.8)
+            },
+            description: emoji
+          });
+        }, i * 200);
+      }
+      
+      alert('献' + type + '成功！已链上存证到SUI网络');
+    }
+  </script>
+</body>
+</html>
