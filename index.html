@@ -14,6 +14,38 @@
     .title { top: 20px; left: 20px; }
     .title h1 { font-size: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
     .title p { opacity: 0.8; }
+    
+    /* 菜单入口 */
+    .menu-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    
+    .menu-btn {
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .menu-btn:hover { background: rgba(255,255,255,0.2); }
+    
+    .wallet-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      font-weight: bold;
+    }
+    
     .btn-enter { 
       position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%);
       padding: 15px 40px; font-size: 1.2rem;
@@ -21,9 +53,13 @@
       border: none; border-radius: 30px; color: white; cursor: pointer;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
+    
     .offer-btts { 
       position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
       display: none; gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 90vw;
     }
     .offer-btn {
       padding: 12px 24px; font-size: 1rem;
@@ -33,6 +69,164 @@
     }
     .tip { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; display: none; }
     .cesium-viewer-bottom { display: none !important; }
+    
+    /* 导航页弹窗 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 90vw;
+      max-height: 80vh;
+      overflow-y: auto;
+      color: white;
+    }
+    .modal h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ffd700;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: none; border: none;
+      color: white; font-size: 24px;
+      cursor: pointer;
+    }
+    
+    /* 导航卡片 */
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .nav-card {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .nav-card:hover { 
+      transform: translateY(-10px); 
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,215,0,0.8);
+    }
+    .nav-card .icon { font-size: 4rem; margin-bottom: 15px; }
+    .nav-card .name { font-size: 1.3rem; font-weight: bold; color: #ffd700; margin-bottom: 10px; }
+    .nav-card .desc { font-size: 0.9rem; opacity: 0.8; }
+    
+    /* 祠堂卡片 */
+    .temple-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .temple-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .temple-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.2); }
+    .temple-card .icon { font-size: 3rem; margin-bottom: 10px; }
+    .temple-card .name { font-weight: bold; color: #ffd700; }
+    .temple-card .count { font-size: 0.8rem; opacity: 0.7; margin-top: 5px; }
+    
+    /* 纪念品卡片 */
+    .gift-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .gift-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .gift-card .icon { font-size: 2.5rem; }
+    .gift-card .name { font-size: 0.9rem; margin-top: 8px; }
+    .gift-card .time { font-size: 0.7rem; opacity: 0.6; margin-top: 5px; }
+    
+    /* 鲜花NFT */
+    .nft-display { text-align: center; padding: 40px; }
+    .nft-flower { font-size: 6rem; animation: float 2s ease-in-out infinite; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    .nft-info {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(255,215,0,0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(255,215,0,0.3);
+    }
+    .nft-info h3 { color: #ffd700; }
+    .nft-hash { font-family: monospace; font-size: 0.7rem; word-break: break-all; opacity: 0.7; margin-top: 10px; }
+    
+    /* 全景iframe */
+    #vrFrame {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 999;
+      border: none;
+    }
+    #closeVr {
+      display: none;
+      position: fixed;
+      top: 20px; right: 20px;
+      z-index: 1000;
+      padding: 10px 20px;
+      background: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .menu-container { 
+        top: auto; bottom: 150px; right: 10px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        max-width: 90vw;
+        gap: 5px;
+      }
+      .menu-btn { font-size: 0.7rem; padding: 6px 8px; white-space: nowrap; }
+      .wallet-btn { font-size: 0.65rem; padding: 6px 6px; }
+      .offer-btts { bottom: 30px; gap: 8px; }
+      .offer-btn { padding: 8px 12px; font-size: 0.8rem; }
+      .nav-grid { grid-template-columns: 1fr; }
+      .temple-grid { grid-template-columns: repeat(2, 1fr); }
+      .gift-grid { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -43,10 +237,17 @@
     <p>3D元宇宙祭奠平台</p>
   </div>
   
-  <button class="ui btn-enter" onclick="descend()">🚀 进入纪念空间</button>
+  <!-- 右上角菜单 -->
+  <div class="menu-container">
+    <button class="menu-btn wallet-btn" onclick="openWallet()">💳 SUI钱包</button>
+    <button class="menu-btn" onclick="openCollection()">🏛️ 我的收藏祠堂</button>
+    <button class="menu-btn" onclick="openMemorial()">📦 我的纪念品</button>
+  </div>
+  
+  <button class="ui btn-enter" onclick="showNav()">🚀 选择祠堂进入</button>
   
   <div class="ui offer-btts" id="offers">
-    <button class="offer-btn" style="font-size:1.2rem;padding:15px 30px;background:linear-gradient(135deg,#667eea,#764ba2);" onclick="goTo720()">🏛️ 进入常氏祠堂</button>
+    <button class="offer-btn" onclick="goTo720('https://roma.720yun.com/vr/4c00784d187a5895/')">🏛️ 长安数字馆</button>
     <button class="offer-btn" onclick="offer('花')">🌸 献花</button>
     <button class="offer-btn" onclick="offer('纸')">💰 烧纸</button>
     <button class="offer-btn" onclick="offer('香')">🕯️ 焚香</button>
@@ -54,9 +255,122 @@
   
   <div class="ui tip" id="tip">🔗 祭奠记录已上链存证 (SUI Network)</div>
   
-  <!-- 720全景iframe嵌入 -->
-  <iframe id="vrFrame" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999;border:none;" allowfullscreen></iframe>
-  <button id="closeVr" style="display:none;position:fixed;top:20px;right:20px;z-index:1000;padding:10px 20px;background:#fff;border:none;border-radius:5px;cursor:pointer;font-size:16px;" onclick="closeVr()">✕ 关闭全景</button>
+  <!-- 全景iframe -->
+  <iframe id="vrFrame" allowfullscreen></iframe>
+  <button id="closeVr" onclick="closeVr()">✕ 关闭全景</button>
+
+  <!-- 导航页弹窗 -->
+  <div class="modal" id="navModal">
+    <div class="modal-content">
+      <h2>🗺️ 选择祠堂</h2>
+      <div class="nav-grid">
+        <div class="nav-card" onclick="goTo720('https://roma.720yun.com/vr/4c00784d187a5895/')">
+          <div class="icon">🏛️</div>
+          <div class="name">长安数字馆</div>
+          <div class="desc">历史文化的数字化呈现</div>
+        </div>
+        <div class="nav-card" onclick="goTo720('https://www.720yun.com/3dm/2f2z857rnnt')">
+          <div class="icon">🐉</div>
+          <div class="name">闽越网无诸</div>
+          <div class="desc">闽越文化纪念馆</div>
+        </div>
+        <div class="nav-card" onclick="goTo720('https://www.720yun.com/t/82b2awaum4v?scene_id=31502')">
+          <div class="icon">⛩️</div>
+          <div class="name">虎门龙眼祠堂</div>
+          <div class="desc">传统宗祠文化</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('navModal')">✕</button>
+    </div>
+  </div>
+
+  <!-- SUI钱包弹窗 -->
+  <div class="modal" id="walletModal">
+    <div class="modal-content">
+      <h2>💳 SUI 钱包</h2>
+      <div style="text-align: center; padding: 20px;">
+        <p style="margin-bottom: 15px;">连接你的SUI钱包</p>
+        <button class="menu-btn wallet-btn" style="font-size: 1.1rem; padding: 15px 30px;" onclick="connectWallet()">🔗 连接钱包</button>
+        <div id="walletInfo" style="display: none; margin-top: 20px;">
+          <p>地址: <span id="walletAddress" style="font-family: monospace;"></span></p>
+          <p style="margin-top: 10px;">余额: <span id="walletBalance" style="color: #ffd700;"></span> SUI</p>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('walletModal')">✕</button>
+    </div>
+  </div>
+
+  <!-- 我的收藏祠堂弹窗 -->
+  <div class="modal" id="collectionModal">
+    <div class="modal-content">
+      <h2>🏛️ 我的收藏祠堂</h2>
+      <div class="temple-grid">
+        <div class="temple-card" onclick="goTo720('https://roma.720yun.com/vr/4c00784d187a5895/')">
+          <div class="icon">🏛️</div>
+          <div class="name">长安数字馆</div>
+          <div class="count">已有 128 人祭拜</div>
+        </div>
+        <div class="temple-card" onclick="goTo720('https://www.720yun.com/3dm/2f2z857rnnt')">
+          <div class="icon">🐉</div>
+          <div class="name">闽越网无诸</div>
+          <div class="count">已有 56 人祭拜</div>
+        </div>
+        <div class="temple-card" onclick="goTo720('https://www.720yun.com/t/82b2awaum4v?scene_id=31502')">
+          <div class="icon">⛩️</div>
+          <div class="name">虎门龙眼祠堂</div>
+          <div class="count">已有 32 人祭拜</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('collectionModal')">✕</button>
+    </div>
+  </div>
+
+  <!-- 我的纪念品弹窗 -->
+  <div class="modal" id="memorialModal">
+    <div class="modal-content">
+      <h2>📦 我的纪念品</h2>
+      <div class="gift-grid">
+        <div class="gift-card">
+          <div class="icon">🌸</div>
+          <div class="name">献花 x5</div>
+          <div class="time">2024-01-15</div>
+        </div>
+        <div class="gift-card">
+          <div class="icon">💰</div>
+          <div class="name">烧纸 x3</div>
+          <div class="time">2024-01-14</div>
+        </div>
+        <div class="gift-card">
+          <div class="icon">🕯️</div>
+          <div class="name">焚香 x7</div>
+          <div class="time">2024-01-13</div>
+        </div>
+        <div class="gift-card">
+          <div class="icon">🎁</div>
+          <div class="name">鲜花NFT</div>
+          <div class="time">2024-01-12</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('memorialModal')">✕</button>
+    </div>
+  </div>
+
+  <!-- 鲜花NFT弹窗 -->
+  <div class="modal" id="nftModal">
+    <div class="modal-content">
+      <div class="nft-display">
+        <div class="nft-flower">🌸🌸🌸</div>
+        <h2 style="color: #ffd700; margin-top: 20px;">🎉 鲜花NFT 已铸造</h2>
+        <div class="nft-info">
+          <h3>🌸 鲜花 NFT</h3>
+          <p style="margin-top: 10px;">你献出的鲜花已上链存证</p>
+          <div class="nft-hash">0x7f9...3a2b</div>
+          <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">区块链: SUI Network</p>
+        </div>
+        <button class="menu-btn wallet-btn" style="margin-top: 20px;" onclick="closeModal('nftModal')">确认</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // Cesium Token
@@ -77,27 +391,66 @@
       scene3DOnly: true
     });
 
-    // 初始视角 - 榆林(37°59'08"N 109°32'56"E)
+    // 初始视角 - 榆林
     viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 20000000)
     });
 
     let stage = 'earth';
 
-    function goTo720() {
-      window.open('https://vr.3d66.com/vr/index_detail_5046407.asp?pageSource=2', '_blank');
+    // 弹窗控制
+    function showNav() {
+      document.getElementById('navModal').classList.add('active');
+    }
+    
+    function openWallet() {
+      document.getElementById('walletModal').classList.add('active');
+    }
+    
+    function openCollection() {
+      document.getElementById('collectionModal').classList.add('active');
+    }
+    
+    function openMemorial() {
+      document.getElementById('memorialModal').classList.add('active');
+    }
+    
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    
+    // 连接钱包（模拟）
+    function connectWallet() {
+      document.getElementById('walletAddress').textContent = '0x7f9...3a2b';
+      document.getElementById('walletBalance').textContent = '1,234.56';
+      document.getElementById('walletInfo').style.display = 'block';
+    }
+
+    // 进入720全景
+    function goTo720(url) {
+      document.getElementById('vrFrame').src = url;
+      document.getElementById('vrFrame').style.display = 'block';
+      document.getElementById('closeVr').style.display = 'block';
+      
+      // 关闭所有弹窗
+      closeModal('navModal');
+      closeModal('collectionModal');
+    }
+
+    function closeVr() {
+      document.getElementById('vrFrame').style.display = 'none';
+      document.getElementById('vrFrame').src = '';
+      document.getElementById('closeVr').style.display = 'none';
     }
 
     function descend() {
       stage = 'descending';
       
-      // 俯冲到祠堂位置
       viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 5000),
         duration: 3,
         complete: function() {
           stage = 'temple';
-          // 添加祠堂模型（简单体）
           addTemple();
           document.querySelector('.btn-enter').style.display = 'none';
           document.getElementById('offers').style.display = 'flex';
@@ -107,10 +460,8 @@
     }
 
     function addTemple() {
-      // 添加祠堂位置 - 榆林
       const position = Cesium.Cartesian3.fromDegrees(109.55, 37.99, 0);
       
-      // 祠堂主体（红色矩形）
       viewer.entities.add({
         position: position,
         box: {
@@ -121,7 +472,6 @@
         }
       });
 
-      // 屋顶（黄色三角形）
       viewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 60),
         box: {
@@ -130,13 +480,10 @@
         }
       });
 
-      // 柱子
-      const colors = [Cesium.Color.WHITE, Cesium.Color.RED, Cesium.Color.fromCssColorString('#8B0000')];
       const offsets = [[-70,-50], [70,-50], [-70,50], [70,50]];
-      
       offsets.forEach((off, i) => {
         viewer.entities.add({
-          position: Cesium.Cartesian3.fromDegrees(116.41 + off[0]*0.0001, 39.91 + off[1]*0.0001, 20),
+          position: Cesium.Cartesian3.fromDegrees(109.55 + off[0]*0.0001, 37.99 + off[1]*0.0001, 20),
           cylinder: {
             length: 60,
             topRadius: 5,
@@ -146,7 +493,6 @@
         });
       });
 
-      // 牌匾
       viewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(109.55, 37.995, 70),
         box: {
@@ -156,31 +502,10 @@
       });
     }
 
-    function closeVr() {
-      document.getElementById('vrFrame').style.display = 'none';
-      document.getElementById('vrFrame').src = '';
-      document.getElementById('closeVr').style.display = 'none';
-    }
-
-    function goTo720() {
-      // 显示720全景iframe
-      document.getElementById('vrFrame').src = 'https://vr.3d66.com/vr/index_detail_2633658.asp';
-      document.getElementById('vrFrame').style.display = 'block';
-      document.getElementById('closeVr').style.display = 'block';
-    }
-
     function offer(type) {
-      // 添加祭奠效果
-      const positions = [
-        Cesium.Cartesian3.fromDegrees(109.55, 37.99, 100),
-        Cesium.Cartesian3.fromDegrees(109.548, 37.99, 100),
-        Cesium.Cartesian3.fromDegrees(109.552, 37.99, 100)
-      ];
-      
       const emojis = ['🌸', '💰', '🕯️'];
       const emoji = emojis[['花','纸','香'].indexOf(type)];
       
-      // 飘落效果
       for(let i=0; i<10; i++) {
         setTimeout(() => {
           viewer.entities.add({
@@ -192,6 +517,12 @@
             description: emoji
           });
         }, i * 200);
+      }
+      
+      if (type === '花') {
+        setTimeout(() => {
+          document.getElementById('nftModal').classList.add('active');
+        }, 1500);
       }
       
       alert('献' + type + '成功！已链上存证到SUI网络');

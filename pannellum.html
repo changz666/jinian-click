@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>祠堂全景 - Pannellum版</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+  <style>
+    body { margin: 0; padding: 0; }
+    #panorama { width: 100vw; height: 100vh; }
+    
+    /* 关闭按钮 */
+    .close-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 10px 20px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .close-btn:hover { background: rgba(0,0,0,0.9); }
+    
+    /* 加载提示 */
+    .loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 1.2rem;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">加载中...</div>
+  <div id="panorama"></div>
+  <button class="close-btn" onclick="closePano()">✕ 关闭全景</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+  <script>
+    // 使用示例全景图（可直接替换为你自己的图）
+    // 替换方式：将下面的 URL 换成你的全景图路径
+    const panoramaUrl = 'https://pannellum.org/images/cerro-toco-0.jpg';
+    
+    const viewer = pannellum.viewer('panorama', {
+      type: 'equirectangular',
+      panorama: panoramaUrl,
+      autoLoad: true,
+      autoRotate: -2,
+      compass: true,
+      showControls: true,
+      theme: 'dark',
+      title: '祠堂全景',
+      author: '纪念祠',
+      yaw: 0,
+      pitch: 0,
+      hfov: 100,
+      minHfov: 50,
+      maxHfov: 120,
+      hotSpots: [
+        {
+          pitch: -5,
+          yaw: 120,
+          type: 'info',
+          text: '祠堂入口',
+          cssClass: 'custom-hotspot'
+        }
+      ]
+    });
+
+    viewer.on('load', function() {
+      document.getElementById('loading').style.display = 'none';
+    });
+
+    function closePano() {
+      if (window.parent !== window) {
+        // 如果在iframe中
+        window.parent.closeVr();
+      } else {
+        // 否则直接返回
+        history.back();
+      }
+    }
+  </script>
+</body>
+</html>
