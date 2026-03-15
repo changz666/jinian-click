@@ -598,7 +598,7 @@
 
   <script>
     // Cesium Token
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWFlLTQ3ODMtYmEwYi1kMmFjY2M2N2E4YzciLCJpZCI6NTc2NDYsImlhdCI6MTY0MzczODU0NH0.Zx6R2R8zp6dJ3qM3UzJVdG6SVPkKk7RvJVk2uK4L7k';
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyM2RlNzVmYS1iOTg2LTRkNDYtODAzOS1lYTUzOThjYWE2ZmEiLCJpZCI6NDAzNDgzLCJpYXQiOjE3NzM0NzY3NTN9.I5QiLSn5LQwvk--e2AJrluc8JJNypTCbqHJAGJIDewE';
     
     const viewer = new Cesium.Viewer('cesiumContainer', {
       terrainProvider: Cesium.createWorldTerrain(),
@@ -741,71 +741,6 @@
       document.getElementById('vrFrame').src = '';
       document.getElementById('closeVr').style.display = 'none';
       document.getElementById('vrOffers').style.display = 'none';
-    }
-    
-    // 弹幕相关
-    const danmuNames = ['张三', '李四', '王五', '赵六', '孙七', '周八', '吴九', '郑十', '钱十一', '陈十二', '刘十三', '杨十四', '黄十五', '常少', '网友***888', '小***23', '用户***abc'];
-    const danmuActions = ['献花', '焚香', '烧纸'];
-    let danmuInterval = null;
-    
-    function getRandomName() {
-      return danmuNames[Math.floor(Math.random() * danmuNames.length)];
-    }
-    
-    function getRandomTime() {
-      const hour = Math.floor(Math.random() * 24);
-      const min = Math.floor(Math.random() * 60);
-      return `${hour.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`;
-    }
-    
-    function getRandomAction() {
-      return danmuActions[Math.floor(Math.random() * danmuActions.length)];
-    }
-    
-    function showDanmu() {
-      const container = document.getElementById('danmuContainer');
-      const name = getRandomName();
-      const time = getRandomTime();
-      const action = getRandomAction();
-      
-      const item = document.createElement('div');
-      item.className = 'danmu-item';
-      item.innerHTML = `${name} · ${time}<br>来过祠堂 ${action}`;
-      
-      container.appendChild(item);
-      
-      // 6秒后移除
-      setTimeout(() => {
-        if (item.parentNode) {
-          item.parentNode.removeChild(item);
-        }
-      }, 6000);
-    }
-    
-    function startDanmu() {
-      const container = document.getElementById('danmuContainer');
-      container.style.display = 'block';
-      
-      // 每2-5秒随机显示一条
-      danmuInterval = setInterval(() => {
-        if (Math.random() > 0.3) { // 70%概率显示
-          showDanmu();
-        }
-      }, 2000);
-      
-      // 初始显示几条
-      setTimeout(showDanmu, 500);
-      setTimeout(showDanmu, 1500);
-      setTimeout(showDanmu, 2500);
-    }
-    
-    function stopDanmu() {
-      if (danmuInterval) {
-        clearInterval(danmuInterval);
-        danmuInterval = null;
-      }
-      document.getElementById('danmuContainer').innerHTML = '';
-      document.getElementById('danmuContainer').style.display = 'none';
     }
     
     // 全景内献花
