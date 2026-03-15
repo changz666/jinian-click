@@ -3,11 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>纪念祠 - 3D元宇宙祭奠平台</title>
+  <title>奇幻星球 Fantasy Planet</title>
   <script src="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Cesium.js"></script>
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { 
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
     body { font-family: 'Microsoft YaHei', sans-serif; overflow: hidden; }
     #cesiumContainer { width: 100vw; height: 100vh; }
     .ui { position: absolute; z-index: 100; color: white; }
@@ -27,17 +34,19 @@
     }
     
     .menu-btn {
-      padding: 10px 20px;
-      font-size: 0.9rem;
-      background: rgba(0,0,0,0.6);
+      padding: 12px 18px;
+      font-size: 14px;
+      background: rgba(0,0,0,0.7);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 10px;
       color: white;
       cursor: pointer;
       transition: all 0.3s;
+      min-height: 44px; /* 触摸友好最小高度 */
+      min-width: 44px;
     }
-    .menu-btn:hover { background: rgba(255,255,255,0.2); }
+    .menu-btn:hover { background: rgba(255,255,255,0.25); }
     
     .wallet-btn {
       background: linear-gradient(135deg, #667eea, #764ba2);
@@ -45,47 +54,70 @@
       font-weight: bold;
     }
     
-    /* 首页按钮 */
+    /* 首页按钮 - 更大更醒目 */
     .btn-enter { 
-      position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%);
-      padding: 15px 40px; font-size: 1.2rem;
+      position: absolute; bottom: 15%;
+      left: 50%; transform: translateX(-50%);
+      padding: 18px 50px;
+      font-size: 18px;
       background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none; border-radius: 30px; color: white; cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      border: none; border-radius: 50px; 
+      color: white; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      min-height: 56px;
     }
+    .btn-enter:active { transform: translateX(-50%) scale(0.96); }
     
-    /* 祠堂选择按钮 */
+    /* 祠堂选择按钮 - 大卡片 */
     .temple-select-btts { 
-      position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
-      display: none; gap: 15px;
+      position: absolute; bottom: 12%;
+      left: 50%; transform: translateX(-50%);
+      display: none; gap: 20px;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 90vw;
+      max-width: 95%;
     }
     .temple-btn {
-      padding: 15px 25px; font-size: 1rem;
-      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
-      border: 2px solid rgba(255,215,0,0.5); border-radius: 15px;
-      color: white; cursor: pointer; text-align: center;
+      padding: 20px 30px;
+      font-size: 16px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,215,0,0.6);
+      border-radius: 20px;
+      color: white; 
+      cursor: pointer; 
+      text-align: center;
+      min-width: 120px;
+      min-height: 80px;
     }
-    .temple-btn:hover { background: rgba(255,255,255,0.3); border-color: #ffd700; }
-    .temple-btn .icon { font-size: 2rem; display: block; }
-    .temple-btn .name { font-size: 0.9rem; margin-top: 5px; }
+    .temple-btn:hover { background: rgba(255,255,255,0.25); border-color: #ffd700; }
+    .temple-btn:active { transform: scale(0.95); }
+    .temple-btn .icon { font-size: 32px; display: block; margin-bottom: 8px; }
+    .temple-btn .name { font-size: 14px; font-weight: 500; }
     
-    /* 祭奠操作按钮 */
+    /* 祭奠操作按钮 - 大按钮 */
     .offer-btts { 
-      position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
-      display: none; gap: 15px;
+      position: absolute; bottom: 12%;
+      left: 50%; transform: translateX(-50%);
+      display: none; gap: 20px;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 90vw;
+      max-width: 95%;
     }
     .offer-btn {
-      padding: 12px 24px; font-size: 1rem;
-      background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3); border-radius: 12px;
-      color: white; cursor: pointer;
+      padding: 16px 32px;
+      font-size: 16px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 16px;
+      color: white; 
+      cursor: pointer;
+      min-height: 52px;
+      min-width: 80px;
     }
+    .offer-btn:hover { background: rgba(255,255,255,0.3); }
+    .offer-btn:active { transform: scale(0.95); }
     
     .tip { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; display: none; }
     .cesium-viewer-bottom { display: none !important; }
@@ -195,102 +227,121 @@
       position: fixed;
       top: 20px; right: 20px;
       z-index: 1001;
-      padding: 10px 20px;
+      padding: 12px 24px;
       background: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 25px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: 500;
+      min-height: 44px;
+      min-width: 44px;
+    }
+    #closeVr:active { background: #eee; }
+    
+    @media (max-width: 768px) {
+      #closeVr {
+        top: 12px; right: 12px;
+        padding: 10px 18px;
+        font-size: 14px;
+      }
     }
     
     /* 全景内的操作按钮 */
     .vr-offer-btts {
       display: none;
       position: fixed;
-      bottom: 30px;
+      bottom: 5%;
       left: 50%;
       transform: translateX(-50%);
       z-index: 1002;
-      gap: 15px;
+      gap: 20px;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 90vw;
+      width: 90%;
     }
     .vr-offer-btn {
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
+      flex: 1;
+      min-width: 100px;
+      padding: 16px 24px;
+      font-size: 16px;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(12px);
       border: 2px solid rgba(255,215,0,0.6);
       border-radius: 30px;
       color: white;
       cursor: pointer;
+      min-height: 52px;
     }
     .vr-offer-btn:hover {
       background: rgba(255,215,0,0.3);
       border-color: #ffd700;
     }
+    .vr-offer-btn:active { transform: scale(0.95); }
     
-    @media (max-width: 768px) {
-      .vr-offer-btts { bottom: 20px; gap: 10px; }
-      .vr-offer-btn { padding: 12px 20px; font-size: 0.9rem; }
-    }
-    
-    /* 响应式 */
+    /* 响应式 - 手机端适配 */
     @media (max-width: 768px) {
       /* 标题 */
-      .title { top: 10px; left: 10px; }
-      .title h1 { font-size: 1.3rem; }
-      .title p { font-size: 0.8rem; }
+      .title { top: 8px; left: 10px; }
+      .title h1 { font-size: 1.2rem; }
+      .title p { font-size: 0.7rem; }
       
-      /* 右上角菜单 - 改为横向紧凑排列 */
+      /* 右上角菜单 - 横向紧凑排列 */
       .menu-container { 
-        top: 10px; right: 10px;
+        top: 8px; right: 8px;
         flex-direction: row;
         flex-wrap: nowrap;
-        gap: 3px;
+        gap: 4px;
       }
       .menu-btn { 
-        font-size: 0.6rem; 
-        padding: 5px 6px; 
+        font-size: 11px; 
+        padding: 6px 8px; 
         white-space: nowrap;
+        min-height: 36px;
       }
-      .wallet-btn { font-size: 0.55rem; padding: 5px 4px; }
+      .wallet-btn { font-size: 10px; padding: 6px 6px; }
       
-      /* 首页按钮 */
+      /* 首页按钮 - 触摸友好 */
       .btn-enter { 
-        padding: 12px 30px; 
-        font-size: 1rem;
-        bottom: 80px;
+        padding: 14px 36px; 
+        font-size: 16px;
+        bottom: 18%;
+        min-height: 50px;
       }
       
-      /* 祠堂选择 - 改为横向排列 */
+      /* 祠堂选择 - 卡片横向排列 */
       .temple-select-btts { 
-        bottom: 20px;
-        gap: 8px;
+        bottom: 15%;
+        gap: 10px;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: center;
-        max-width: 95vw;
+        width: 92%;
       }
       .temple-btn { 
-        padding: 8px 10px; 
-        font-size: 0.7rem;
-        min-width: 70px;
+        flex: 1;
+        padding: 12px 8px; 
+        font-size: 12px;
+        min-width: 0;
+        min-height: 70px;
       }
-      .temple-btn .icon { font-size: 1.2rem; }
-      .temple-btn .name { font-size: 0.6rem; margin-top: 2px; }
+      .temple-btn .icon { font-size: 24px; margin-bottom: 4px; }
+      .temple-btn .name { font-size: 11px; margin-top: 2px; }
       
-      /* 祭奠按钮 - 横向排列 */
+      /* 祭奠按钮 - 横向等宽排列 */
       .offer-btts { 
-        bottom: 20px;
-        gap: 6px;
+        bottom: 12%;
+        gap: 10px;
         flex-direction: row;
         flex-wrap: nowrap;
+        width: 92%;
       }
       .offer-btn { 
-        padding: 8px 12px; 
-        font-size: 0.75rem;
+        flex: 1;
+        padding: 12px 8px; 
+        font-size: 13px;
+        min-width: 0;
+        min-height: 44px;
       }
       
       /* 提示文字 */
@@ -315,8 +366,8 @@
   <div id="cesiumContainer"></div>
   
   <div class="ui title">
-    <h1>🕯️ 纪念祠</h1>
-    <p>3D元宇宙祭奠平台</p>
+    <h1>🌍 奇幻星球</h1>
+    <p>Fantasy Planet · 3D元宇宙</p>
   </div>
   
   <!-- 右上角菜单（进入纪念空间后显示） -->
@@ -422,7 +473,10 @@
           <div class="nft-hash">0x7f9...3a2b</div>
           <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">区块链: SUI Network</p>
         </div>
-        <button class="menu-btn wallet-btn" style="margin-top: 20px;" onclick="closeModal('nftModal')">确认</button>
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+          <button class="menu-btn" style="background: rgba(255,255,255,0.2);" onclick="backToCollection()">🏛️ 返回祠堂</button>
+          <button class="menu-btn wallet-btn" onclick="closeModal('nftModal')">确认</button>
+        </div>
       </div>
     </div>
   </div>
@@ -574,6 +628,17 @@
       } else {
         alert('献' + type + '成功！已链上存证到SUI网络');
       }
+    }
+    
+    // 返回祠堂选择
+    function backToCollection() {
+      closeModal('nftModal');
+      closeVr();
+      // 显示祠堂选择
+      document.getElementById('templeSelect').style.display = 'flex';
+      document.getElementById('offers').style.display = 'none';
+      document.getElementById('tip').style.display = 'none';
+      stage = 'temple_select';
     }
 
     function offer(type) {
