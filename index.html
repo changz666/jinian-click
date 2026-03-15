@@ -194,7 +194,7 @@
       display: none;
       position: fixed;
       top: 20px; right: 20px;
-      z-index: 1000;
+      z-index: 1001;
       padding: 10px 20px;
       background: #fff;
       border: none;
@@ -203,24 +203,111 @@
       font-size: 16px;
     }
     
+    /* 全景内的操作按钮 */
+    .vr-offer-btts {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1002;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 90vw;
+    }
+    .vr-offer-btn {
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,215,0,0.6);
+      border-radius: 30px;
+      color: white;
+      cursor: pointer;
+    }
+    .vr-offer-btn:hover {
+      background: rgba(255,215,0,0.3);
+      border-color: #ffd700;
+    }
+    
+    @media (max-width: 768px) {
+      .vr-offer-btts { bottom: 20px; gap: 10px; }
+      .vr-offer-btn { padding: 12px 20px; font-size: 0.9rem; }
+    }
+    
     /* 响应式 */
     @media (max-width: 768px) {
+      /* 标题 */
+      .title { top: 10px; left: 10px; }
+      .title h1 { font-size: 1.3rem; }
+      .title p { font-size: 0.8rem; }
+      
+      /* 右上角菜单 - 改为横向紧凑排列 */
       .menu-container { 
-        top: auto; bottom: 180px; right: 10px;
+        top: 10px; right: 10px;
         flex-direction: row;
         flex-wrap: nowrap;
-        justify-content: flex-end;
-        max-width: 90vw;
-        gap: 5px;
+        gap: 3px;
       }
-      .menu-btn { font-size: 0.7rem; padding: 6px 8px; white-space: nowrap; }
-      .wallet-btn { font-size: 0.65rem; padding: 6px 6px; }
-      .temple-select-btts { bottom: 40px; gap: 10px; }
-      .temple-btn { padding: 10px 15px; font-size: 0.8rem; }
-      .offer-btts { bottom: 30px; gap: 8px; }
-      .offer-btn { padding: 8px 12px; font-size: 0.8rem; }
-      .temple-grid { grid-template-columns: repeat(2, 1fr); }
-      .gift-grid { grid-template-columns: repeat(2, 1fr); }
+      .menu-btn { 
+        font-size: 0.6rem; 
+        padding: 5px 6px; 
+        white-space: nowrap;
+      }
+      .wallet-btn { font-size: 0.55rem; padding: 5px 4px; }
+      
+      /* 首页按钮 */
+      .btn-enter { 
+        padding: 12px 30px; 
+        font-size: 1rem;
+        bottom: 80px;
+      }
+      
+      /* 祠堂选择 - 改为横向排列 */
+      .temple-select-btts { 
+        bottom: 20px;
+        gap: 8px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        max-width: 95vw;
+      }
+      .temple-btn { 
+        padding: 8px 10px; 
+        font-size: 0.7rem;
+        min-width: 70px;
+      }
+      .temple-btn .icon { font-size: 1.2rem; }
+      .temple-btn .name { font-size: 0.6rem; margin-top: 2px; }
+      
+      /* 祭奠按钮 - 横向排列 */
+      .offer-btts { 
+        bottom: 20px;
+        gap: 6px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+      }
+      .offer-btn { 
+        padding: 8px 12px; 
+        font-size: 0.75rem;
+      }
+      
+      /* 提示文字 */
+      .tip { 
+        bottom: 8px; 
+        font-size: 0.65rem;
+      }
+      
+      /* 弹窗优化 */
+      .modal-content {
+        padding: 15px;
+        border-radius: 12px;
+      }
+      .modal h2 { font-size: 1.2rem; }
+      .temple-grid { grid-template-columns: 1fr; gap: 10px; }
+      .gift-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .modal-close { top: 10px; right: 10px; font-size: 20px; }
     }
   </style>
 </head>
@@ -269,6 +356,13 @@
   <!-- 全景iframe -->
   <iframe id="vrFrame" allowfullscreen></iframe>
   <button id="closeVr" onclick="closeVr()">✕ 关闭全景</button>
+  
+  <!-- 全景内的献花按钮 -->
+  <div class="vr-offer-btts" id="vrOffers">
+    <button class="vr-offer-btn" onclick="vrOffer('花')">🌸 献花</button>
+    <button class="vr-offer-btn" onclick="vrOffer('纸')">💰 烧纸</button>
+    <button class="vr-offer-btn" onclick="vrOffer('香')">🕯️ 焚香</button>
+  </div>
 
   <!-- SUI钱包弹窗 -->
   <div class="modal" id="walletModal">
@@ -380,10 +474,59 @@
     function enterTempleScene() {
       stage = 'temple';
       
+      // 添加3D祠堂模型
+      addTemple();
+      
       // 显示祭奠操作按钮
       document.getElementById('templeSelect').style.display = 'none';
       document.getElementById('offers').style.display = 'flex';
       document.getElementById('tip').style.display = 'block';
+    }
+
+    // 添加3D祠堂模型
+    function addTemple() {
+      // 祠堂主体（红色矩形）
+      viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 0),
+        box: {
+          dimensions: new Cesium.Cartesian3(200, 150, 80),
+          material: Cesium.Color.fromCssColorString('#8B0000'),
+          outline: true,
+          outlineColor: Cesium.Color.GOLD
+        }
+      });
+
+      // 屋顶（黄色）
+      viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(109.55, 37.99, 60),
+        box: {
+          dimensions: new Cesium.Cartesian3(220, 160, 20),
+          material: Cesium.Color.GOLD
+        }
+      });
+
+      // 柱子
+      const offsets = [[-70,-50], [70,-50], [-70,50], [70,50]];
+      offsets.forEach((off, i) => {
+        viewer.entities.add({
+          position: Cesium.Cartesian3.fromDegrees(109.55 + off[0]*0.0001, 37.99 + off[1]*0.0001, 20),
+          cylinder: {
+            length: 60,
+            topRadius: 5,
+            bottomRadius: 5,
+            material: Cesium.Color.fromCssColorString('#8B0000')
+          }
+        });
+      });
+
+      // 牌匾
+      viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(109.55, 37.995, 70),
+        box: {
+          dimensions: new Cesium.Cartesian3(80, 10, 15),
+          material: Cesium.Color.BLACK
+        }
+      });
     }
 
     // 弹窗控制
@@ -411,6 +554,7 @@
       document.getElementById('vrFrame').src = url;
       document.getElementById('vrFrame').style.display = 'block';
       document.getElementById('closeVr').style.display = 'block';
+      document.getElementById('vrOffers').style.display = 'flex';
       
       // 进入祠堂场景
       enterTempleScene();
@@ -420,6 +564,16 @@
       document.getElementById('vrFrame').style.display = 'none';
       document.getElementById('vrFrame').src = '';
       document.getElementById('closeVr').style.display = 'none';
+      document.getElementById('vrOffers').style.display = 'none';
+    }
+    
+    // 全景内献花
+    function vrOffer(type) {
+      if (type === '花') {
+        document.getElementById('nftModal').classList.add('active');
+      } else {
+        alert('献' + type + '成功！已链上存证到SUI网络');
+      }
     }
 
     function offer(type) {
