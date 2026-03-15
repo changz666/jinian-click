@@ -1,4 +1,4 @@
-# 🕯️ jinian.click - 3D元宇宙祭奠平台
+# 🕯️ jinian.click - 3D纪念平台
 
 ## 项目介绍
 - 域名：jinian.click
