@@ -122,6 +122,54 @@
     .tip { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; display: none; }
     .cesium-viewer-bottom { display: none !important; }
     
+    /* 弹幕样式 */
+    .danmu-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      width: 180px;
+      max-height: 35vh;
+      z-index: 101;
+      overflow: hidden;
+      padding: 25px 0;
+    }
+    .danmu-container::before,
+    .danmu-container::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .danmu-container::before {
+      top: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%);
+    }
+    .danmu-container::after {
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    }
+    .danmu-item {
+      padding: 6px 10px;
+      margin-bottom: 8px;
+      background: rgba(0,0,0,0.65);
+      border-radius: 15px;
+      color: white;
+      font-size: 12px;
+      animation: danmuFade 6s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes danmuFade {
+      0% { opacity: 0; transform: translateY(15px); }
+      10% { opacity: 1; transform: translateY(0); }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    
     /* 滚动弹幕 */
     .danmu-container {
       display: none;
@@ -465,6 +513,9 @@
   
   <div class="ui tip" id="tip">🔗 祭奠记录已上链存证 (SUI Network)</div>
   
+  <!-- 弹幕容器 -->
+  <div class="danmu-container" id="danmuContainer"></div>
+  
   <!-- 滚动弹幕 -->
   <div class="danmu-container" id="danmuContainer"></div>
   
@@ -677,8 +728,9 @@
       document.getElementById('closeVr').style.display = 'block';
       document.getElementById('vrOffers').style.display = 'flex';
       
-      // 进入祠堂场景（包含弹幕启动）
+      // 进入祠堂场景并启动弹幕
       enterTempleScene();
+      startDanmu();
     }
 
     function closeVr() {
@@ -800,6 +852,40 @@
       }
       
       alert('献' + type + '成功！已链上存证到SUI网络');
+    }
+    
+    // 弹幕功能
+    const danmuNames = ['张三', '李四', '王五', '赵六', '孙七', '周八', '吴九', '郑十', '钱十一', '陈十二', '刘十三', '杨十四', '常少', '网友***888'];
+    const danmuActions = ['献花', '焚香', '烧纸'];
+    let danmuTimer = null;
+    
+    function showDanmuItem() {
+      const container = document.getElementById('danmuContainer');
+      const name = danmuNames[Math.floor(Math.random() * danmuNames.length)];
+      const hour = Math.floor(Math.random() * 24);
+      const min = Math.floor(Math.random() * 60);
+      const action = danmuActions[Math.floor(Math.random() * danmuActions.length)];
+      
+      const item = document.createElement('div');
+      item.className = 'danmu-item';
+      item.innerHTML = `${name} · ${hour.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}<br>来过祠堂 ${action}`;
+      container.appendChild(item);
+      
+      setTimeout(() => { if(item.parentNode) item.parentNode.removeChild(item); }, 6000);
+    }
+    
+    function startDanmu() {
+      document.getElementById('danmuContainer').style.display = 'block';
+      showDanmuItem();
+      showDanmuItem();
+      showDanmuItem();
+      danmuTimer = setInterval(showDanmuItem, 2500);
+    }
+    
+    function stopDanmu() {
+      if (danmuTimer) { clearInterval(danmuTimer); danmuTimer = null; }
+      document.getElementById('danmuContainer').innerHTML = '';
+      document.getElementById('danmuContainer').style.display = 'none';
     }
   </script>
 </body>
