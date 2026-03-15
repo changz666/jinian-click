@@ -546,10 +546,11 @@
   </div>
 
   <script>
-    // Cesium Token - 使用公共token
+    // Cesium Token
     Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWFlLTQ3ODMtYmEwYi1kMmFjY2M2N2E4YzciLCJpZCI6NTc2NDYsImlhdCI6MTY0MzczODU0NH0.Zx6R2R8zp6dJ3qM3UzJVdG6SVPkKk7RvJVk2uK4L7k';
     
     const viewer = new Cesium.Viewer('cesiumContainer', {
+      terrainProvider: Cesium.createWorldTerrain(),
       animation: false,
       baseLayerPicker: false,
       fullscreenButton: false,
@@ -560,13 +561,8 @@
       selectionIndicator: false,
       timeline: false,
       navigationHelpButton: false,
-      scene3DOnly: true,
-      infoBox: false,
-      shouldAnimate: false
+      scene3DOnly: true
     });
-    
-    // 隐藏自带控件
-    viewer._cesiumWidget._creditContainer.style.display = 'none';
 
     // 初始视角 - 榆林
     viewer.camera.setView({
@@ -688,6 +684,11 @@
     function closeVr() {
       // 停止弹幕
       stopDanmu();
+      // 关闭VR
+      document.getElementById('vrFrame').style.display = 'none';
+      document.getElementById('vrFrame').src = '';
+      document.getElementById('closeVr').style.display = 'none';
+      document.getElementById('vrOffers').style.display = 'none';
     }
     
     // 弹幕相关
@@ -753,11 +754,6 @@
       }
       document.getElementById('danmuContainer').innerHTML = '';
       document.getElementById('danmuContainer').style.display = 'none';
-    }
-      document.getElementById('vrFrame').style.display = 'none';
-      document.getElementById('vrFrame').src = '';
-      document.getElementById('closeVr').style.display = 'none';
-      document.getElementById('vrOffers').style.display = 'none';
     }
     
     // 全景内献花
