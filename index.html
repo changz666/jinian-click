@@ -122,6 +122,26 @@
     .tip { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; display: none; }
     .cesium-viewer-bottom { display: none !important; }
     
+    /* 音乐控制按钮 */
+    .music-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid rgba(255,215,0,0.6);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .music-btn:active { transform: scale(0.95); }
+    
     /* 弹幕样式 */
     .danmu-container {
       display: none;
@@ -474,6 +494,12 @@
 <body>
   <div id="cesiumContainer"></div>
   
+  <!-- 音乐控制 -->
+  <audio id="bgm" loop preload="auto">
+    <source src="Human_Legacy_final---0e9e3332-cc02-4265-b325-6648e74b4ae8.mp3" type="audio/mpeg">
+  </audio>
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🔇</button>
+  
   <div class="ui title">
     <h1>🌍 奇幻星球</h1>
     <p>Fantasy Planet · 3D元宇宙</p>
@@ -597,6 +623,22 @@
   </div>
 
   <script>
+    // 音乐控制
+    let musicPlaying = false;
+    const bgm = document.getElementById('bgm');
+    const musicBtn = document.getElementById('musicBtn');
+    
+    function toggleMusic() {
+      if (musicPlaying) {
+        bgm.pause();
+        musicBtn.textContent = '🔇';
+      } else {
+        bgm.play().catch(e => console.log('播放失败:', e));
+        musicBtn.textContent = '🔊';
+      }
+      musicPlaying = !musicPlaying;
+    }
+    
     // Cesium Token
     Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyM2RlNzVmYS1iOTg2LTRkNDYtODAzOS1lYTUzOThjYWE2ZmEiLCJpZCI6NDAzNDgzLCJpYXQiOjE3NzM0NzY3NTN9.I5QiLSn5LQwvk--e2AJrluc8JJNypTCbqHJAGJIDewE';
     
