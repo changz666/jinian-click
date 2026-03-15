@@ -122,6 +122,67 @@
     .tip { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; display: none; }
     .cesium-viewer-bottom { display: none !important; }
     
+    /* 滚动弹幕 */
+    .danmu-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      width: 200px;
+      max-height: 40vh;
+      z-index: 100;
+      overflow: hidden;
+      padding: 30px 0;
+    }
+    /* 上下透明渐变遮罩 */
+    .danmu-container::before,
+    .danmu-container::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .danmu-container::before {
+      top: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 100%);
+    }
+    .danmu-container::after {
+      bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+    }
+    .danmu-item {
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 20px;
+      color: white;
+      font-size: 13px;
+      white-space: nowrap;
+      animation: danmuFade 6s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes danmuFade {
+      0% { opacity: 0; transform: translateY(20px); }
+      10% { opacity: 1; transform: translateY(0); }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    
+    @media (max-width: 768px) {
+      .danmu-container {
+        left: 10px;
+        width: 150px;
+        max-height: 30vh;
+      }
+      .danmu-item { font-size: 11px; padding: 6px 10px; }
+      .danmu-container::before,
+      .danmu-container::after { height: 25px; }
+    }
+    
     /* 弹窗样式 */
     .modal {
       display: none;
@@ -404,6 +465,9 @@
   
   <div class="ui tip" id="tip">🔗 祭奠记录已上链存证 (SUI Network)</div>
   
+  <!-- 滚动弹幕 -->
+  <div class="danmu-container" id="danmuContainer"></div>
+  
   <!-- 全景iframe -->
   <iframe id="vrFrame" allowfullscreen></iframe>
   <button id="closeVr" onclick="closeVr()">✕ 关闭全景</button>
@@ -535,6 +599,9 @@
       document.getElementById('templeSelect').style.display = 'none';
       document.getElementById('offers').style.display = 'flex';
       document.getElementById('tip').style.display = 'block';
+      
+      // 开始弹幕
+      startDanmu();
     }
 
     // 添加3D祠堂模型
@@ -612,9 +679,79 @@
       
       // 进入祠堂场景
       enterTempleScene();
+      // 开始显示弹幕
+      startDanmu();
     }
 
     function closeVr() {
+      // 停止弹幕
+      stopDanmu();
+    }
+    
+    // 弹幕相关
+    const danmuNames = ['张三', '李四', '王五', '赵六', '孙七', '周八', '吴九', '郑十', '钱十一', '陈十二', '刘十三', '杨十四', '黄十五', '常少', '网友***888', '小***23', '用户***abc'];
+    const danmuActions = ['献花', '焚香', '烧纸'];
+    let danmuInterval = null;
+    
+    function getRandomName() {
+      return danmuNames[Math.floor(Math.random() * danmuNames.length)];
+    }
+    
+    function getRandomTime() {
+      const hour = Math.floor(Math.random() * 24);
+      const min = Math.floor(Math.random() * 60);
+      return `${hour.toString().padStart(2,'0')}:${min.toString().padStart(2,'0')}`;
+    }
+    
+    function getRandomAction() {
+      return danmuActions[Math.floor(Math.random() * danmuActions.length)];
+    }
+    
+    function showDanmu() {
+      const container = document.getElementById('danmuContainer');
+      const name = getRandomName();
+      const time = getRandomTime();
+      const action = getRandomAction();
+      
+      const item = document.createElement('div');
+      item.className = 'danmu-item';
+      item.innerHTML = `${name} · ${time}<br>来过祠堂 ${action}`;
+      
+      container.appendChild(item);
+      
+      // 6秒后移除
+      setTimeout(() => {
+        if (item.parentNode) {
+          item.parentNode.removeChild(item);
+        }
+      }, 6000);
+    }
+    
+    function startDanmu() {
+      const container = document.getElementById('danmuContainer');
+      container.style.display = 'block';
+      
+      // 每2-5秒随机显示一条
+      danmuInterval = setInterval(() => {
+        if (Math.random() > 0.3) { // 70%概率显示
+          showDanmu();
+        }
+      }, 2000);
+      
+      // 初始显示几条
+      setTimeout(showDanmu, 500);
+      setTimeout(showDanmu, 1500);
+      setTimeout(showDanmu, 2500);
+    }
+    
+    function stopDanmu() {
+      if (danmuInterval) {
+        clearInterval(danmuInterval);
+        danmuInterval = null;
+      }
+      document.getElementById('danmuContainer').innerHTML = '';
+      document.getElementById('danmuContainer').style.display = 'none';
+    }
       document.getElementById('vrFrame').style.display = 'none';
       document.getElementById('vrFrame').src = '';
       document.getElementById('closeVr').style.display = 'none';
