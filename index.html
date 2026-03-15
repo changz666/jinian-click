@@ -56,7 +56,7 @@
     
     /* 首页按钮 - 更大更醒目 */
     .btn-enter { 
-      position: absolute; bottom: 15%;
+      position: absolute; bottom: 80px;
       left: 50%; transform: translateX(-50%);
       padding: 18px 50px;
       font-size: 18px;
@@ -432,6 +432,7 @@
       
       /* 首页按钮 - 触摸友好 */
       .btn-enter { 
+        bottom: 70px;
         padding: 14px 36px; 
         font-size: 16px;
         bottom: 18%;
@@ -627,6 +628,16 @@
     let musicPlaying = false;
     const bgm = document.getElementById('bgm');
     const musicBtn = document.getElementById('musicBtn');
+    
+    // 用户第一次点击页面时自动播放音乐
+    document.addEventListener('click', function() {
+      if (!musicPlaying) {
+        bgm.play().then(() => {
+          musicPlaying = true;
+          musicBtn.textContent = '🔊';
+        }).catch(e => {});
+      }
+    }, { once: true });
     
     function toggleMusic() {
       if (musicPlaying) {
